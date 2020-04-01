@@ -14,6 +14,7 @@ class Game extends JPanel implements ActionListener {
 	int x = 0;
 	int y = 0;
 	static int k = 0;
+	static int level = 1;
 	ArrayList<Enemy> enemy = new ArrayList<>();
 	Random r = new Random();
 
@@ -32,7 +33,7 @@ class Game extends JPanel implements ActionListener {
 
 	Game() throws InterruptedException {
 		map_grass = new Map();
-		this.enemy.add(new Enemy(10, 10, 10, this.map_grass.getCell(19, (int) (Math.random() * 14))));
+		this.enemy.add(new Enemy(10, 10, (int)(Math.random() * level + 1), this.map_grass.getCell(19, (int) (Math.random() * 14))));
 		init();
 	}
 
@@ -48,8 +49,12 @@ class Game extends JPanel implements ActionListener {
 		{
 			q.setX();
 		}
+
 		if (k % 80 == 0)
-			this.enemy.add(new Enemy(10, 10, 10, this.map_grass.getCell(19, (int) (Math.random() * 14))));
+		{
+			this.enemy.add(new Enemy(10, 10, (int)(Math.random() * level + 1), this.map_grass.getCell(19, (int) (Math.random() * 14))));
+			level++;
+		}
 		repaint();
 	}
 }

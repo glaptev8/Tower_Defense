@@ -33,7 +33,7 @@ public class Enemy {
 	}
 
 	public void setX() {
-		this.x--;
+		this.x -= this.speed;
 	}
 
 	public void setX(int x) {
