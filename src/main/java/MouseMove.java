@@ -28,6 +28,7 @@ public class MouseMove implements MouseListener, MouseMotionListener  {
 	}
 
 	public static void offBuilder(){
+		nameImage = "";
 		build = false;
 		newX = 0;
 		newY = 0;
