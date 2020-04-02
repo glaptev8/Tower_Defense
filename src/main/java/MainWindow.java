@@ -17,7 +17,7 @@ class MainWindow extends JFrame {
 		setTitle("window");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBackground(Color.BLACK);
-		setSize(1280, 918);
+		setSize(1380, 918);
 		add(new Game());
 		setVisible(true);
 	}

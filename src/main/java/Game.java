@@ -34,55 +34,49 @@ class Game extends JPanel implements ActionListener {
 			else
 				g.drawImage(q.getImage(), q.getX(), q.getY(), null);
 		}
-		for (Defender q: this.defenders)
-			g.drawImage(q.getImage(), q.getX(), q.getY(), null);
 		Iterator<Bullet> iter1 = this.bullets.iterator();
 		while (iter1.hasNext()) {
 			Bullet q = iter1.next();
 			if (q.getX() > 1280)
 				iter1.remove();
 			else {
-				g.drawImage(q.getImage(), q.getX(), q.getY(), null);
+				g.drawImage(q.getImage(), q.getX(), q.getY() - 8, 64,64, null);
 				q.setSpeed();
 			}
 			}
+		for (Defender q: this.defenders)
+			g.drawImage(q.getImage(), q.getX(), q.getY(), 64, 64, null);
+
+// RIGHT TOOLS
+
+		g.setColor(Color.getHSBColor(180, 180, 200));
+		g.fillRect(1216, 0, 164, 918);
+		g.drawImage(constructorImage("icon"), 1280, 128, 100, 100, null);
+		g.drawImage(constructorImage("icon"), 1280, 234, 100, 100, null);
+		g.drawImage(constructorImage("defender1"), 1300, 146, 64, 64, null);
+		g.drawImage(constructorImage("defender2"), 1300, 252, 64, 64, null);
+		if (MouseMove.getMoved()) {
+			g.drawImage(constructorImage(MouseMove.getNameImage()), MouseMove.getNewX(), MouseMove.getNewY(), 64, 64, null);
 		}
+		if (MouseMove.getBuild()) {
+			if (MouseMove.getNewX() < 1216 && MouseMove.getNewY() < 916) {
+				if (MouseMove.getNameImage().equals("defender1")) {
+					defenders.add(new Defender1((MouseMove.getNewX() / 64) * 64, (MouseMove.getNewY() / 64) * 64));
+				} else if (MouseMove.getNameImage().equals("defender2")) {
+					defenders.add(new Defender2((MouseMove.getNewX() / 64) * 64, (MouseMove.getNewY() / 64) * 64));
+				}
+				}
+				MouseMove.offBuilder();
+			}
+		}
+
+
 
 	Game() throws InterruptedException {
 		map_grass = new Map();
 		this.enemy.add(new Enemy((int)(Math.random() * level + 1), this.map_grass.getCell(19, (int) (Math.random() * 14))));
-		this.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseClicked(MouseEvent mouseEvent) {
-				int x = mouseEvent.getX() / 64 * 64;
-				int y = mouseEvent.getY() / 64 * 64;
-				if (level % 2 == 0)
-					defenders.add(new Defender1(x, y));
-				else
-					defenders.add(new Defender2(x, y));
-				repaint();
-			}
-
-			@Override
-			public void mousePressed(MouseEvent mouseEvent) {
-
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent mouseEvent) {
-
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent mouseEvent) {
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent mouseEvent) {
-
-			}
-		});
+		this.addMouseListener(new MouseMove());
+		this.addMouseMotionListener(new MouseMove());
 		init();
 	}
 
@@ -146,5 +140,9 @@ class Game extends JPanel implements ActionListener {
 			level++;
 		}
 		repaint();
+	}
+
+	public Image constructorImage(String nameImage) {
+		return new ImageIcon("src/main/resources/" + nameImage + ".png").getImage();
 	}
 }
