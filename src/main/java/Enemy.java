@@ -39,7 +39,7 @@ abstract class Enemy {
 }
 
 class Enemy1 extends Enemy{
-	private final String pathToEnemy = "src/main/resources/enemy.png";
+	private final String pathToEnemy = "src/main/resources/shipNLO.png";
 
 	public Enemy1(int speed, Cell startCell) {
 		this.speed = speed;

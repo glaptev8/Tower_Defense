@@ -110,6 +110,7 @@ class Game extends JPanel implements ActionListener {
 					p.setHp(bullet.getDamage());
 					bullets.remove();
 					if (p.getHp() <= 0) {
+						explosions.add(new Explosion(p.getX(), p.getY(), "enemy"));
 						player.addMoney(p.getMoney());
 						iter.remove();
 					}
