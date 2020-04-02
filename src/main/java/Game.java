@@ -144,7 +144,7 @@ class Game extends JPanel implements ActionListener {
 				Defender p = iter2.next();
 				if (q.getY() == p.getY() && q.getX() == p.getX()) {
 					explosions.add(new Explosion(p.getX(), p.getY(), "defender"));
-					map_grass.getCell(p.getX(),p.getY()).setDefender(false);
+					map_grass.getCell(p.getX() / 64,p.getY() / 64).setDefender(false);
 					iter2.remove();
 				}
 			}
