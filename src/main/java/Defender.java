@@ -26,7 +26,7 @@ abstract class Defender {
 }
 
 class Defender1 extends Defender {
-	private String pathToDefender = "src/main/resources/defender.png";
+	private String pathToDefender = "src/main/resources/defender1.png";
 
 	Defender1(int x, int y) {
 		this.x = x;
@@ -37,7 +37,7 @@ class Defender1 extends Defender {
 }
 
 class Defender2 extends Defender {
-	private String pathToDefender = "src/main/resources/defender.png";
+	private String pathToDefender = "src/main/resources/defender2.png";
 
 	Defender2(int x, int y) {
 		this.x = x;

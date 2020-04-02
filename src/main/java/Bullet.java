@@ -4,7 +4,7 @@ import java.awt.*;
 public class Bullet {
 	private int x = -1;
 	private int y = -1;
-	private final String pathToBullet = "src/main/resources/bullet.png";
+	private final String pathToBullet = "src/main/resources/rocket.png";
 	private final Defender defender;
 	private final int speed = 5;
 	private int damage = 20;
