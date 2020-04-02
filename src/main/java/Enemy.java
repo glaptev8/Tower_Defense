@@ -8,7 +8,7 @@ public class Enemy {
 	private int y;
 	private float speed;
 	private int hp = 100;
-	private final String pathToEnemy = "src/main/resources/enemy.png";
+	private final String pathToEnemy = "src/main/resources/shipNLO.png";
 	private Image image;
 	Timer t;
 

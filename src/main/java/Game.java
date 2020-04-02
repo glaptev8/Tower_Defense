@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 class Game extends JPanel implements ActionListener {
@@ -16,24 +17,15 @@ class Game extends JPanel implements ActionListener {
 	ArrayList<Enemy> enemy = new ArrayList<>();
 	ArrayList<Defender> defenders = new ArrayList<>();
 	ArrayList<Bullet> bullets = new ArrayList<>();
+	ArrayList<Explosion> explosions = new ArrayList<>();
 	Timer t = new Timer(100, this);
+
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		for (int i = 0; i < map_grass.getLengthX(); i++) {
 			for (int j = 0; j < map_grass.getLengthY(); j++)
 				g.drawImage(map_grass.getCell(i, j).getImage(), map_grass.getCell(i, j).getX(), map_grass.getCell(i, j).getY(), null);
 			}
-		Iterator<Enemy> iter2 = this.enemy.iterator();
-		while (iter2.hasNext()) {
-			Enemy q = iter2.next();
-			if (q.getX() < 0)
-			{
-				iter2.remove();
-				t.stop();
-			}
-			else
-				g.drawImage(q.getImage(), q.getX(), q.getY(), null);
-		}
 		Iterator<Bullet> iter1 = this.bullets.iterator();
 		while (iter1.hasNext()) {
 			Bullet q = iter1.next();
@@ -46,6 +38,26 @@ class Game extends JPanel implements ActionListener {
 			}
 		for (Defender q: this.defenders)
 			g.drawImage(q.getImage(), q.getX(), q.getY(), 64, 64, null);
+		Iterator<Enemy> iter2 = this.enemy.iterator();
+		while (iter2.hasNext()) {
+			Enemy q = iter2.next();
+			if (q.getX() < 0)
+			{
+				iter2.remove();
+				t.stop();
+			}
+			else
+				g.drawImage(q.getImage(), q.getX(), q.getY(), 64, 64,null);
+		}
+
+		Iterator<Explosion> iterExp = this.explosions.iterator();
+		while (iterExp.hasNext()) {
+			Explosion exp = iterExp.next();
+			g.drawImage(exp.getImage(), exp.getX(), exp.getY() , 64,64, null);
+			if (!exp.getAlive()) {
+				iterExp.remove();
+			}
+		}
 
 // RIGHT TOOLS
 
@@ -60,12 +72,15 @@ class Game extends JPanel implements ActionListener {
 		}
 		if (MouseMove.getBuild()) {
 			if (MouseMove.getNewX() < 1216 && MouseMove.getNewY() < 916) {
-				if (MouseMove.getNameImage().equals("defender1")) {
-					defenders.add(new Defender1((MouseMove.getNewX() / 64) * 64, (MouseMove.getNewY() / 64) * 64));
-				} else if (MouseMove.getNameImage().equals("defender2")) {
-					defenders.add(new Defender2((MouseMove.getNewX() / 64) * 64, (MouseMove.getNewY() / 64) * 64));
+				if (!map_grass.getCell(MouseMove.getNewX() / 64, MouseMove.getNewY() / 64).getDefender()) {
+					if (MouseMove.getNameImage().equals("defender1")) {
+						defenders.add(new Defender1((MouseMove.getNewX() / 64) * 64, (MouseMove.getNewY() / 64) * 64));
+					} else if (MouseMove.getNameImage().equals("defender2")) {
+						defenders.add(new Defender2((MouseMove.getNewX() / 64) * 64, (MouseMove.getNewY() / 64) * 64));
+					}
+					map_grass.getCell(MouseMove.getNewX() / 64, MouseMove.getNewY() / 64).setDefender(true);
 				}
-				}
+			}
 				MouseMove.offBuilder();
 			}
 		}
@@ -110,14 +125,13 @@ class Game extends JPanel implements ActionListener {
 			Iterator<Enemy> iter = this.enemy.iterator();
 			while (iter.hasNext()) {
 				Enemy p = iter.next();
-				System.out.println(q.getX() - 6 + "  " + p.getX());
-				System.out.println(q.getY() - 6 + "  " + p.getY());
-				System.out.println("\n");
 				if (q.getX() >= p.getX() && q.getY() - 6 == p.getY() && q.getStartX() < p.getX()) {
 					p.setHp(q.getDamage());
 					iter1.remove();
-					if (p.getHp() <= 0)
+					if (p.getHp() <= 0){
+						explosions.add(new Explosion(p.getX(), p.getY(), "enemy"));
 						iter.remove();
+					}
 				}
 			}
 		}
@@ -128,8 +142,11 @@ class Game extends JPanel implements ActionListener {
 			Enemy q = iter.next();
 			while (iter2.hasNext()) {
 				Defender p = iter2.next();
-				if (q.getY() == p.getY() && q.getX() == p.getX())
+				if (q.getY() == p.getY() && q.getX() == p.getX()) {
+					explosions.add(new Explosion(p.getX(), p.getY(), "defender"));
+					map_grass.getCell(p.getX(),p.getY()).setDefender(false);
 					iter2.remove();
+				}
 			}
 		}
 
