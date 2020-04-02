@@ -1,23 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class Enemy {
-	private int x;
-	private int y;
-	private float speed;
-	private int hp = 100;
-	private final String pathToEnemy = "src/main/resources/enemy.png";
-	private Image image;
-	Timer t;
-
-	public Enemy(int speed, Cell startCell) {
-		this.speed = speed;
-		this.x = startCell.getX();
-		this.y = startCell.getY();
-		this.image = new ImageIcon(this.pathToEnemy).getImage();
-	}
+abstract class Enemy {
+	protected int x;
+	protected int y;
+	protected float speed;
+	protected int hp;
+	protected int money;
+	protected Image image;
 
 	public Image getImage() {
 		return image;
@@ -31,6 +21,10 @@ public class Enemy {
 		return this.hp;
 	}
 
+	public int getMoney() {
+		return money;
+	}
+
 	public int getX() {
 		return x;
 	}
@@ -39,15 +33,20 @@ public class Enemy {
 		this.x -= this.speed;
 	}
 
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
-
 	public int getY() {
 		return y;
+	}
+}
+
+class Enemy1 extends Enemy{
+	private final String pathToEnemy = "src/main/resources/enemy.png";
+
+	public Enemy1(int speed, Cell startCell) {
+		this.speed = speed;
+		this.x = startCell.getX();
+		this.y = startCell.getY();
+		this.hp = 100;
+		this.money = 50;
+		this.image = new ImageIcon(this.pathToEnemy).getImage();
 	}
 }
