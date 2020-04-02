@@ -6,19 +6,14 @@ import java.awt.event.ActionListener;
 public class Enemy {
 	private int x;
 	private int y;
-	private int width;
-	private int height;
 	private float speed;
-	private Cell startCell;
+	private int hp = 100;
 	private final String pathToEnemy = "src/main/resources/enemy.png";
 	private Image image;
 	Timer t;
 
-	public Enemy(int width, int height, int speed, Cell startCell) {
-		this.width = width;
-		this.height = height;
+	public Enemy(int speed, Cell startCell) {
 		this.speed = speed;
-		this.startCell = startCell;
 		this.x = startCell.getX();
 		this.y = startCell.getY();
 		this.image = new ImageIcon(this.pathToEnemy).getImage();
@@ -26,6 +21,14 @@ public class Enemy {
 
 	public Image getImage() {
 		return image;
+	}
+
+	public void setHp(int hp) {
+		this.hp -= hp;
+	}
+
+	public int getHp() {
+		return this.hp;
 	}
 
 	public int getX() {
