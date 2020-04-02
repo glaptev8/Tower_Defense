@@ -1,5 +1,5 @@
 public class Player {
-	private int money = 400;
+	private int money = 10000;
 	private int kiils = 0;
 
 	public int getMoney() {
