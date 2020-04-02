@@ -7,7 +7,7 @@ abstract class Defender {
 	protected Image image;
 	protected int damage = 20;
 	protected String pathToDefender;
-	protected int cost;
+	protected int price;
 
 	public int getDamage() {
 		return this.damage;
@@ -21,8 +21,8 @@ abstract class Defender {
 		return y;
 	}
 
-	public int getCost() {
-		return cost;
+	public int getprice() {
+		return price;
 	}
 
 	public Image getImage() {
@@ -38,7 +38,7 @@ class Defender1 extends Defender {
 		this.y = y;
 		this.damage = 50;
 		this.image = new ImageIcon(this.pathToDefender).getImage();
-		this.cost = 100;
+		this.price = 100;
 	}
 }
 
@@ -49,7 +49,7 @@ class Defender2 extends Defender {
 		this.x = x;
 		this.y = y;
 		this.damage = 100;
-		this.cost = 200;
+		this.price = 200;
 		this.image = new ImageIcon(this.pathToDefender).getImage();
 	}
 }

@@ -8,7 +8,7 @@ public class MouseMove implements MouseListener, MouseMotionListener  {
 	private static int newY;
 	private static boolean moved;
 	private static boolean build;
-	private static String nameImage;
+	private static String nameImage = "";
 
 	public static boolean getMoved() {
 		return moved;
@@ -28,6 +28,7 @@ public class MouseMove implements MouseListener, MouseMotionListener  {
 	}
 
 	public static void offBuilder(){
+		nameImage = "";
 		build = false;
 		newX = 0;
 		newY = 0;

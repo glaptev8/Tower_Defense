@@ -16,6 +16,7 @@ class Game extends JPanel implements ActionListener {
 	ArrayList<Enemy>	enemy = new ArrayList<>();
 	ArrayList<Defender>	defenders = new ArrayList<>();
 	ArrayList<Bullet>	bullets = new ArrayList<>();
+	ArrayList<Explosion> explosions = new ArrayList<>();
 	Timer				t = new Timer(100, this);
 
 	public void paintComponent(Graphics g) {
@@ -26,6 +27,14 @@ class Game extends JPanel implements ActionListener {
 			drawEnemy(g);
 			drawBullet(g);
 			drawDefender(g);
+			Iterator<Explosion> iterExp = this.explosions.iterator();
+			while (iterExp.hasNext()) {
+				Explosion exp = iterExp.next();
+				g.drawImage(exp.getImage(), exp.getX(), exp.getY() , 64,64, null);
+				if (!exp.getAlive()) {
+					iterExp.remove();
+				}
+			}
 			drawRightTools(g);
 		}
 	}
@@ -195,19 +204,19 @@ class Game extends JPanel implements ActionListener {
 		g.drawImage(constructorImage("defender1"), 1275, 143, 64, 64, null);
 		g.drawImage(constructorImage("defender2"), 1275, 266, 64, 64, null);
 		g.setColor(Color.BLACK);
-		g.drawString("Price: " + defender1.getCost(), 1275, 234);
-		g.drawString("Price: " + defender2.getCost(), 1275, 357);
+		g.drawString("Price: " + defender1.getprice(), 1275, 234);
+		g.drawString("Price: " + defender2.getprice(), 1275, 357);
 		g.drawString("Your money: " + player.getMoney(), 1250, 128);
 		if (inGame && MouseMove.getMoved()) {
 			g.drawImage(constructorImage(MouseMove.getNameImage()), MouseMove.getNewX(), MouseMove.getNewY(), 64, 64, null);
 		}
 		if (inGame && MouseMove.getBuild()) {
 			if (MouseMove.getNewX() < 1216 && MouseMove.getNewY() < 916) {
-				if (MouseMove.getNameImage().equals("defender1") && player.getMoney() >= defender1.getCost()) {
-					this.player.subtractMoney(defender1.getCost());
+				if (MouseMove.getNameImage().equals("defender1") && player.getMoney() >= defender1.getprice()) {
+					this.player.subtractMoney(defender1.getprice());
 					defenders.add(new Defender1((MouseMove.getNewX() / 64) * 64, (MouseMove.getNewY() / 64) * 64));
-				} else if (MouseMove.getNameImage().equals("defender2") && player.getMoney() >= defender1.getCost()) {
-					this.player.subtractMoney(defender2.getCost());
+				} else if (MouseMove.getNameImage().equals("defender2") && player.getMoney() >= defender1.getprice()) {
+					this.player.subtractMoney(defender2.getprice());
 					defenders.add(new Defender2((MouseMove.getNewX() / 64) * 64, (MouseMove.getNewY() / 64) * 64));
 				}
 			}

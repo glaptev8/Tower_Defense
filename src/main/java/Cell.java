@@ -2,10 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 
 class Cell {
+	private boolean         defender;
 	private int				x;
 	private int				y;
 	private String			type;
-	private Image image;
+	private Image           image;
 	private final String	pathToGrass = "src/main/resources/grass.png";
 	private final String	pathToWater = "src/main/resources/water.png";
 	private final String	pathToMud = "src/main/resources/mud.png";
@@ -27,12 +28,6 @@ class Cell {
 			default:
 				break;
 		}
-//		if ("grass".equals(type))
-//			this.image = new ImageIcon(pathToGrass).getImage();
-//		else if ("water".equals(type))
-//			this.image = new ImageIcon(pathToWater).getImage();
-//		else if ("mud".equals(type))
-//			this.image = new ImageIcon(pathToMud).getImage();
 	}
 
 	public int getX() {
@@ -65,5 +60,13 @@ class Cell {
 
 	public void setImage(Image image) {
 		this.image = image;
+	}
+
+	public void setDefender(boolean defender) {
+		this.defender = defender;
+	}
+
+	public boolean getDefender() {
+		return defender;
 	}
 }

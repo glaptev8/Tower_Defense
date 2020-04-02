@@ -14,11 +14,10 @@ class MainWindow extends JFrame {
 	}
 
 	MainWindow () throws InterruptedException {
-		setTitle("window");
+		setTitle("⚔INVASION⚔");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBackground(Color.BLACK);
 		setSize(1380, 918);
-
 		add(new Game());
 		setVisible(true);
 	}
