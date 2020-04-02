@@ -17,6 +17,7 @@ class Game extends JPanel implements ActionListener {
 	ArrayList<Defender> defenders = new ArrayList<>();
 	ArrayList<Bullet> bullets = new ArrayList<>();
 	Timer t = new Timer(100, this);
+
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		for (int i = 0; i < map_grass.getLengthX(); i++) {
