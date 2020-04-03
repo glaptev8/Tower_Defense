@@ -55,7 +55,8 @@ public class Player {
 			else
 				this.enemy.add(new Enemy2(getSpeed(), this.map.getCell(19, (int) (Math.random() * 14))));
 			if (getKills() % 2 == 0 && getKills() != 0) {
-				begin_frequency -= 0.5;
+				if (begin_frequency > 0.5)
+					begin_frequency -= 0.5;
 				if (level % 10 == 0)
 					level += 4;
 				level++;
