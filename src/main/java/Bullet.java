@@ -2,12 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Bullet {
-	private int x = -1;
-	private int y = -1;
-	private final String pathToBullet = "src/main/resources/rocket.png";
+	private int x;
+	private int y;
+	final String pathToBullet = "src/main/resources/rocket.png";
 	private final Defender defender;
 	private final int speed = 5;
-	private int damage = 20;
+	final int DAMAGE;
 	private Image image;
 
 	public Bullet(int x, int y, Defender defender) {
@@ -15,7 +15,7 @@ public class Bullet {
 		this.y = y;
 		this.image = new ImageIcon(this.pathToBullet).getImage();
 		this.defender = defender;
-		this.damage = defender.getDamage();
+		this.DAMAGE = defender.getDamage();
 	}
 
 	public int getX() {
@@ -23,7 +23,7 @@ public class Bullet {
 	}
 
 	public int getDamage() {
-		return damage;
+		return DAMAGE;
 	}
 
 	public int getY() {
