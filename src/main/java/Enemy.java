@@ -4,7 +4,6 @@ import java.awt.*;
 abstract class Enemy {
 	protected int x;
 	protected int y;
-	protected float speed;
 	protected int hp;
 	protected int money;
 	protected Image image;
@@ -29,24 +28,44 @@ abstract class Enemy {
 		return x;
 	}
 
-	public void setX() {
-		this.x -= this.speed;
-	}
-
 	public int getY() {
 		return y;
+	}
+
+	public void setX() {
 	}
 }
 
 class Enemy1 extends Enemy{
 	private final String pathToEnemy = "src/main/resources/shipNLO.png";
+	protected double speed_enemy;
+	public Enemy1(double speed, Cell startCell) {
+		this.speed_enemy = speed;
+		this.x = startCell.getX();
+		this.y = startCell.getY();
+		this.hp = 150;
+		this.money = 50;
+		this.image = new ImageIcon(this.pathToEnemy).getImage();
+	}
 
-	public Enemy1(int speed, Cell startCell) {
-		this.speed = speed;
+	public void setX() {
+		this.x -= speed_enemy;
+	}
+}
+
+class Enemy2 extends Enemy{
+	private final String pathToEnemy = "src/main/resources/enemy.png";
+	protected double speed_enemy;
+	public Enemy2(double speed, Cell startCell) {
+		this.speed_enemy = speed;
 		this.x = startCell.getX();
 		this.y = startCell.getY();
 		this.hp = 100;
 		this.money = 50;
 		this.image = new ImageIcon(this.pathToEnemy).getImage();
+	}
+
+	public void setX() {
+		this.x -= speed_enemy;
 	}
 }

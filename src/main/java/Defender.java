@@ -5,13 +5,6 @@ abstract class Defender {
 	protected int x;
 	protected int y;
 	protected Image image;
-	protected int damage = 20;
-	protected String pathToDefender;
-	protected int price;
-
-	public int getDamage() {
-		return this.damage;
-	}
 
 	public int getX() {
 		return x;
@@ -21,35 +14,54 @@ abstract class Defender {
 		return y;
 	}
 
-	public int getprice() {
-		return price;
+	public int getPrice() {
+		return 1;
 	}
 
 	public Image getImage() {
 		return image;
 	}
+
+	public int getDamage() {
+		return 1;
+	}
 }
 
 class Defender1 extends Defender {
-	private String pathToDefender = "src/main/resources/defender1.png";
+	final String pathToDefender = "src/main/resources/defender1.png";
+	final int DAMAGE = 50;
+	final int PRICE = 100;
 
 	Defender1(int x, int y) {
 		this.x = x;
 		this.y = y;
-		this.damage = 50;
 		this.image = new ImageIcon(this.pathToDefender).getImage();
-		this.price = 100;
+	}
+
+	public int getPrice() {
+		return this.PRICE;
+	}
+
+	public int getDamage() {
+		return DAMAGE;
 	}
 }
 
 class Defender2 extends Defender {
-	private String pathToDefender = "src/main/resources/defender2.png";
-
+	final String pathToDefender = "src/main/resources/defender2.png";
+	final int DAMAGE = 100;
+	final int PRICE = 200;
 	Defender2(int x, int y) {
 		this.x = x;
 		this.y = y;
-		this.damage = 100;
-		this.price = 200;
 		this.image = new ImageIcon(this.pathToDefender).getImage();
+	}
+
+	public int getPrice() {
+		return this.PRICE;
+	}
+
+	public int getDamage() {
+		return DAMAGE;
 	}
 }
