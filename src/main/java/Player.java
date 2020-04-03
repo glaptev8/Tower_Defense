@@ -4,7 +4,8 @@ public class Player {
 	private int		money = 500;
 	private int 	kills = 0;
 	private int 	level = 1;
-	private int 	time_enemy = 2;
+	static  float		begin_frequency = 20;
+	private float 	time_enemy = 2;
 	private double	speed = 1;
 	private Map		map;
 	LinkedList<Enemy>	enemy = new LinkedList<>();
@@ -45,15 +46,18 @@ public class Player {
 	}
 
 	public void addEnemy(int k) {
-		int hard = (int)(Math.random() * (15 - (Math.min(level, 10))));
-		if (k % time_enemy == 0)
+		int hard = (int)(Math.random() * (15 - (Math.min(level, 10))));;
+		if (k % time_enemy == 0.0)
 		{
-			time_enemy = 20 - (Math.min(level, 10)) + (int)(Math.random() * 500 / level);
+			time_enemy = begin_frequency + (int)(Math.random() * 500 / Math.max(level, 3));
 			if (hard == 2 || hard == 1)
 				this.enemy.add(new Enemy1(getSpeed(), this.map.getCell(19, (int) (Math.random() * 14))));
 			else
 				this.enemy.add(new Enemy2(getSpeed(), this.map.getCell(19, (int) (Math.random() * 14))));
 			if (getKills() % 2 == 0 && getKills() != 0) {
+				begin_frequency -= 0.5;
+				if (level % 10 == 0)
+					level += 4;
 				level++;
 				setSpeed();
 			}
