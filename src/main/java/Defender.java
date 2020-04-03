@@ -14,7 +14,7 @@ abstract class Defender {
 		return y;
 	}
 
-	public int getPrice() {
+	public static int getPrice() {
 		return 1;
 	}
 
@@ -30,7 +30,7 @@ abstract class Defender {
 class Defender1 extends Defender {
 	final String pathToDefender = "src/main/resources/defender1.png";
 	final int DAMAGE = 50;
-	final int PRICE = 100;
+	final static int PRICE = 100;
 
 	Defender1(int x, int y) {
 		this.x = x;
@@ -38,8 +38,8 @@ class Defender1 extends Defender {
 		this.image = new ImageIcon(this.pathToDefender).getImage();
 	}
 
-	public int getPrice() {
-		return this.PRICE;
+	public static int getPrice() {
+		return PRICE;
 	}
 
 	public int getDamage() {
@@ -50,15 +50,16 @@ class Defender1 extends Defender {
 class Defender2 extends Defender {
 	final String pathToDefender = "src/main/resources/defender2.png";
 	final int DAMAGE = 100;
-	final int PRICE = 200;
+	final static int PRICE = 200;
+
 	Defender2(int x, int y) {
 		this.x = x;
 		this.y = y;
 		this.image = new ImageIcon(this.pathToDefender).getImage();
 	}
 
-	public int getPrice() {
-		return this.PRICE;
+	public static int getPrice() {
+		return PRICE;
 	}
 
 	public int getDamage() {

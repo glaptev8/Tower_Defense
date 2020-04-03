@@ -8,18 +8,18 @@ import java.util.LinkedList;
 
 class Game extends JPanel implements ActionListener {
 
-	private Map			map = new Map();
-	private Player 		player = new Player();
-	static int 			k = 0;
-	static int			level = 1;
-	private boolean 	inGame = false;
-	private boolean 	gameOver = false;
-	LinkedList<Enemy>	enemy = new LinkedList<>();
+	private Map			    map = new Map();
+	private Player 		    player = new Player();
+	static int 			    k = 0;
+	static int			    level = 1;
+	private boolean 	    inGame = false;
+	private boolean 	    gameOver = false;
+	LinkedList<Enemy>	    enemy = new LinkedList<>();
 	LinkedList<Defender>	defenders = new LinkedList<>();
-	LinkedList<Bullet> bullets = new LinkedList<>();
-	LinkedList<Explosion> explosions = new LinkedList<>();
-	JButton button = createButton();
-	Timer				t = new Timer(100, this);
+	LinkedList<Bullet>      bullets = new LinkedList<>();
+	LinkedList<Explosion>   explosions = new LinkedList<>();
+	JButton                 button = createButton();
+	Timer				    t = new Timer(100, this);
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -82,7 +82,8 @@ class Game extends JPanel implements ActionListener {
 			Iterator<Enemy> iter = this.enemy.iterator();
 			while (iter.hasNext()) {
 				Enemy p = iter.next();
-				if (bullet.getX() >= p.getX() && bullet.getY() - 6 == p.getY() && bullet.getStartX() < p.getX()) {
+				if (bullet.getX() >= p.getX() && bullet.getY() - 6 == p.getY() &&
+						bullet.getStartX() < p.getX()) {
 					p.setHp(bullet.getDamage());
 					bullets.remove();
 					if (p.getHp() <= 0) {
@@ -112,7 +113,8 @@ class Game extends JPanel implements ActionListener {
 			}
 			while (iter2.hasNext()) {
 				Defender p = iter2.next();
-				if (enemy.getY() == p.getY() && (enemy.getX() - p.getX() + level <= level) && (enemy.getX() - p.getX() + level >= 0))
+				if (enemy.getY() == p.getY() && (enemy.getX() - p.getX() + level <= level) &&
+						(enemy.getX() - p.getX() + level >= 0))
 				{
 					explosions.add(new Explosion(p.getX(), p.getY(), "defender"));
 					map.getCell(p.getX() / 64, p.getY() / 64).setDefender(false);
@@ -224,9 +226,8 @@ class Game extends JPanel implements ActionListener {
 	}
 
 	public void drawRightTools(Graphics g) {
-		Defender defender1 = new Defender1(0, 0);
-		Defender defender2 = new Defender2(0, 0);
-
+		int cellX = 0;
+		int cellY = 0;
 		g.setColor(Color.getHSBColor(180, 180, 200));
 		g.fillRect(1216, 0, 164, 918);
 		g.drawImage(constructorImage("icon"), 1255, 128, 100, 100, null);
@@ -234,23 +235,29 @@ class Game extends JPanel implements ActionListener {
 		g.drawImage(constructorImage("defender1"), 1275, 143, 64, 64, null);
 		g.drawImage(constructorImage("defender2"), 1275, 266, 64, 64, null);
 		g.setColor(Color.BLACK);
-		g.drawString("Price: " + defender1.getPrice(), 1275, 234);
-		g.drawString("Price: " + defender2.getPrice(), 1275, 357);
+		g.drawString("Price: " + Defender1.getPrice(), 1275, 234);
+		g.drawString("Price: " + Defender2.getPrice(), 1275, 357);
 		g.drawString("Your money: " + player.getMoney(), 1250, 128);
 		if (inGame && MouseMove.getMoved()) {
-			g.drawImage(constructorImage(MouseMove.getNameImage()), MouseMove.getNewX(), MouseMove.getNewY(), 64, 64, null);
+			cellX = MouseMove.getNewX() / 64;
+			cellY = MouseMove.getNewY() / 64;
+			g.drawImage(constructorImage(MouseMove.getNameImage()),
+					MouseMove.getNewX(), MouseMove.getNewY(), 64, 64, null);
 		}
 		if (inGame && MouseMove.getBuild()) {
 			if (MouseMove.getNewX() < 1216 && MouseMove.getNewY() < 916) {
-				if (!map.getCell(MouseMove.getNewX() / 64, MouseMove.getNewY() / 64).getDefender()) {
-					if (MouseMove.getNameImage().equals("defender1") && player.getMoney() >= defender1.getPrice()) {
-						this.player.subtractMoney(defender1.getPrice());
-						defenders.add(new Defender1((MouseMove.getNewX() / 64) * 64, (MouseMove.getNewY() / 64) * 64));
-					} else if (MouseMove.getNameImage().equals("defender2") && player.getMoney() >= defender1.getPrice()) {
-						this.player.subtractMoney(defender2.getPrice());
-						defenders.add(new Defender2((MouseMove.getNewX() / 64) * 64, (MouseMove.getNewY() / 64) * 64));
+				if (!map.getCell(cellX, cellY).getDefender()) {
+					if (MouseMove.getNameImage().equals("defender1") &&
+							player.getMoney() >= Defender1.getPrice()) {
+						this.player.subtractMoney(Defender1.getPrice());
+						defenders.add(new Defender1(cellX * 64, cellY * 64));
+						map.getCell(cellX, cellY).setDefender(true);
+					} else if (MouseMove.getNameImage().equals("defender2") &&
+								player.getMoney() >= Defender1.getPrice()) {
+						this.player.subtractMoney(Defender2.getPrice());
+						defenders.add(new Defender2(cellX * 64, cellY * 64));
+						map.getCell(cellX, cellY).setDefender(true);
 					}
-					map.getCell(MouseMove.getNewX() / 64, MouseMove.getNewY() / 64).setDefender(true);
 			}
 			}
 			MouseMove.offBuilder();
