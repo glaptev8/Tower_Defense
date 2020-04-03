@@ -13,7 +13,7 @@ class Game extends JPanel implements ActionListener {
 	static int 			k = 0;
 	private boolean 	inGame = false;
 	private boolean 	gameOver = false;
-	JButton button = 	createButton();
+	JButton button;
 	Timer				t = new Timer(100, this);
 
 	public void paintComponent(Graphics g) {
@@ -44,6 +44,7 @@ class Game extends JPanel implements ActionListener {
 	}
 
 	public void init() {
+		JButton button = createButton();
 		add(button);
 	}
 
