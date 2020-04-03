@@ -2,13 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Bullet {
-	private int x;
-	private int y;
-	final String pathToBullet = "src/main/resources/rocket.png";
-	private final Defender defender;
-	private final int speed = 5;
-	final int DAMAGE;
-	private Image image;
+	private int		x;
+	private int		y;
+	private int		speed = 5;
+	final int		DAMAGE;
+	final String	pathToBullet = "src/main/resources/rocket.png";
+	private Defender defender;
+	private Image	image;
 
 	public Bullet(int x, int y, Defender defender) {
 		this.x = x;

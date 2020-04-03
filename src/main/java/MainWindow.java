@@ -1,19 +1,14 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 
 
 class MainWindow extends JFrame {
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) {
 		new MainWindow();
 	}
 
-	MainWindow () throws InterruptedException {
+	MainWindow () {
 		setTitle("⚔INVASION⚔");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBackground(Color.BLACK);

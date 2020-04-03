@@ -9,16 +9,11 @@ import java.util.LinkedList;
 class Game extends JPanel implements ActionListener {
 
 	private Map			map = new Map();
-	private Player 		player = new Player();
+	private Player 		player = new Player(map);
 	static int 			k = 0;
-	static int			level = 1;
 	private boolean 	inGame = false;
 	private boolean 	gameOver = false;
-	LinkedList<Enemy>	enemy = new LinkedList<>();
-	LinkedList<Defender>	defenders = new LinkedList<>();
-	LinkedList<Bullet> bullets = new LinkedList<>();
-	LinkedList<Explosion> explosions = new LinkedList<>();
-	JButton button = createButton();
+	JButton button = 	createButton();
 	Timer				t = new Timer(100, this);
 
 	public void paintComponent(Graphics g) {
@@ -26,9 +21,9 @@ class Game extends JPanel implements ActionListener {
 		if (!gameOver)
 		{
 			drawMap(g);
-			drawEnemy(g);
 			drawBullet(g);
 			drawDefender(g);
+			drawEnemy(g);
 			drawAnimation(g);
 			drawRightTools(g);
 		}
@@ -40,7 +35,7 @@ class Game extends JPanel implements ActionListener {
 			remove(button);
 			g.setFont(f);
 			g.drawString(s, 500, 450);
-			g.drawString("Result: " + player.getkills(), 595, 545);
+			g.drawString("Result: " + player.getKills(), 595, 545);
 		}
 	}
 
@@ -55,21 +50,21 @@ class Game extends JPanel implements ActionListener {
 	public void createBullet() {
 		if (k % 30 == 0)
 		{
-			for (Defender q: this.defenders)
+			for (Defender q: player.defenders)
 			{
 				boolean flag = false;
-				for (Enemy p: this.enemy)
+				for (Enemy p: player.enemy)
 					if (p.getY() == q.getY() && q.getX() < p.getX())
 						flag = true;
 				if (flag)
-					bullets.add(new Bullet(q.getX() + 6, q.getY() + 6, q));
+					player.bullets.add(new Bullet(q.getX() + 6, q.getY() + 6, q));
 			}
 		}
 	}
 
 	public void runBullet() {
 		createBullet();
-		Iterator<Bullet> bullets = this.bullets.iterator();
+		Iterator<Bullet> bullets = player.bullets.iterator();
 
 		while (bullets.hasNext()) {
 			Bullet bullet = bullets.next();
@@ -79,7 +74,7 @@ class Game extends JPanel implements ActionListener {
 				bullets.remove();
 				continue;
 			}
-			Iterator<Enemy> iter = this.enemy.iterator();
+			Iterator<Enemy> iter = player.enemy.iterator();
 			while (iter.hasNext()) {
 				Enemy p = iter.next();
 				if (bullet.getX() >= p.getX() && bullet.getY() - 6 == p.getY() && bullet.getStartX() < p.getX()) {
@@ -87,7 +82,7 @@ class Game extends JPanel implements ActionListener {
 					bullets.remove();
 					if (p.getHp() <= 0) {
 						player.addKills();
-						explosions.add(new Explosion(p.getX(), p.getY(), "enemy"));
+						player.explosions.add(new Explosion(p.getX(), p.getY(), "shot"));
 						player.addMoney(p.getMoney());
 						iter.remove();
 					}
@@ -98,11 +93,11 @@ class Game extends JPanel implements ActionListener {
 	}
 
 	public void runEnemy() {
-		addEnemy();
-		Iterator<Enemy> enemies = this.enemy.iterator();
+		player.addEnemy(k);
+		Iterator<Enemy> enemies = player.enemy.iterator();
 
 		while (enemies.hasNext()) {
-			Iterator<Defender> iter2 = this.defenders.iterator();
+			Iterator<Defender> iter2 = player.defenders.iterator();
 			Enemy enemy = enemies.next();
 			enemy.setX();
 			if (enemy.getX() <= 0) {
@@ -112,8 +107,12 @@ class Game extends JPanel implements ActionListener {
 			}
 			while (iter2.hasNext()) {
 				Defender p = iter2.next();
-				if (enemy.getY() == p.getY() && (enemy.getX() - p.getX() + level <= level) && (enemy.getX() - p.getX() + level >= 0))
+				if (enemy.getY() == p.getY() && (enemy.getX() - p.getX() <= 0) && (enemy.getX() - p.getX() + player.getSpeed() >= 0))
+				{
+					player.explosions.add(new Explosion(p.getX(), p.getY(), "defender"));
+					map.getCell(p.getX() / 64, p.getY() / 64).setDefender(false);
 					iter2.remove();
+				}
 			}
 		}
 	}
@@ -121,22 +120,6 @@ class Game extends JPanel implements ActionListener {
 	public void run() {
 		runEnemy();
 		runBullet();
-	}
-
-	public void addEnemy() {
-		int time_enemy = 1 + (int)(Math.random() * 1000 / level);
-		int hard = (int)(Math.random() * 5);
-		if (k % time_enemy == 0)
-		{
-			if (hard == 2 || hard == 1)
-				this.enemy.add(new Enemy1(player.getSpeed(), this.map.getCell(19, (int) (Math.random() * 14))));
-			else
-				this.enemy.add(new Enemy2(player.getSpeed(), this.map.getCell(19, (int) (Math.random() * 14))));
-			if (player.getkills() % 2 == 0) {
-				level += 1;
-				player.setSpeed();
-			}
-		}
 	}
 
 	@Override
@@ -187,7 +170,7 @@ class Game extends JPanel implements ActionListener {
 	}
 
 	public void drawEnemy(Graphics g) {
-		Iterator<Enemy> iter2 = this.enemy.iterator();
+		Iterator<Enemy> iter2 = player.enemy.iterator();
 		while (iter2.hasNext()) {
 			Enemy q = iter2.next();
 			g.drawImage(q.getImage(), q.getX(), q.getY(), 64, 64, null);
@@ -195,7 +178,7 @@ class Game extends JPanel implements ActionListener {
 	}
 
 	public void drawBullet(Graphics g) {
-		Iterator<Bullet> iter1 = this.bullets.iterator();
+		Iterator<Bullet> iter1 = player.bullets.iterator();
 		while (iter1.hasNext()) {
 			Bullet q = iter1.next();
 			g.drawImage(q.getImage(), q.getX(), q.getY() - 8, 64, 64, null);
@@ -203,7 +186,7 @@ class Game extends JPanel implements ActionListener {
 	}
 
 	public void drawAnimation(Graphics g) {
-		Iterator<Explosion> iterExp = this.explosions.iterator();
+		Iterator<Explosion> iterExp = player.explosions.iterator();
 		while (iterExp.hasNext()) {
 			Explosion exp = iterExp.next();
 			g.drawImage(exp.getImage(), exp.getX(), exp.getY() , 64,64, null);
@@ -214,7 +197,7 @@ class Game extends JPanel implements ActionListener {
 	}
 
 	public void drawDefender(Graphics g) {
-		for (Defender q : this.defenders)
+		for (Defender q : player.defenders)
 			g.drawImage(q.getImage(), q.getX(), q.getY(), 64, 64, null);
 	}
 
@@ -237,13 +220,17 @@ class Game extends JPanel implements ActionListener {
 		}
 		if (inGame && MouseMove.getBuild()) {
 			if (MouseMove.getNewX() < 1216 && MouseMove.getNewY() < 916) {
-				if (MouseMove.getNameImage().equals("defender1") && player.getMoney() >= defender1.getPrice()) {
-					this.player.subtractMoney(defender1.getPrice());
-					defenders.add(new Defender1((MouseMove.getNewX() / 64) * 64, (MouseMove.getNewY() / 64) * 64));
-				} else if (MouseMove.getNameImage().equals("defender2") && player.getMoney() >= defender1.getPrice()) {
-					this.player.subtractMoney(defender2.getPrice());
-					defenders.add(new Defender2((MouseMove.getNewX() / 64) * 64, (MouseMove.getNewY() / 64) * 64));
-				}
+				if (!map.getCell(MouseMove.getNewX() / 64, MouseMove.getNewY() / 64).getDefender()) {
+					if (MouseMove.getNameImage().equals("defender1") && player.getMoney() >= defender1.getPrice()) {
+						this.player.subtractMoney(defender1.getPrice());
+						player.defenders.add(new Defender1((MouseMove.getNewX() / 64) * 64, (MouseMove.getNewY() / 64) * 64));
+						map.getCell(MouseMove.getNewX() / 64, MouseMove.getNewY() / 64).setDefender(true);
+					} else if (MouseMove.getNameImage().equals("defender2") && player.getMoney() >= defender2.getPrice()) {
+						this.player.subtractMoney(defender2.getPrice());
+						player.defenders.add(new Defender2((MouseMove.getNewX() / 64) * 64, (MouseMove.getNewY() / 64) * 64));
+						map.getCell(MouseMove.getNewX() / 64, MouseMove.getNewY() / 64).setDefender(true);
+					}
+			}
 			}
 			MouseMove.offBuilder();
 		}
