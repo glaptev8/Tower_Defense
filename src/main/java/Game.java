@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -10,11 +11,11 @@ class Game extends JPanel implements ActionListener {
 
 	private Map			map = new Map();
 	private Player 		player = new Player(map);
-	static int 			k = 0;
+	private int 		k = 0;
 	private boolean 	inGame = false;
 	private boolean 	gameOver = false;
-	JButton button = null;
-	Timer				t = new Timer(100, this);
+	private JButton 	button = null;
+	private Timer		t = new Timer(100, this);
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -51,21 +52,21 @@ class Game extends JPanel implements ActionListener {
 	public void createBullet() {
 		if (k % 30 == 0)
 		{
-			for (Defender q: player.defenders)
+			for (Defender q: player.getDefenders())
 			{
 				boolean flag = false;
-				for (Enemy p: player.enemy)
+				for (Enemy p: player.getEnemy())
 					if (p.getY() == q.getY() && q.getX() < p.getX())
 						flag = true;
 				if (flag)
-					player.bullets.add(new Bullet(q.getX() + 6, q.getY() + 6, q));
+					player.getBullets().add(new Bullet(q.getX() + 6, q.getY() + 6, q));
 			}
 		}
 	}
 
 	public void runBullet() {
 		createBullet();
-		Iterator<Bullet> bullets = player.bullets.iterator();
+		Iterator<Bullet> bullets = player.getBullets().iterator();
 
 		while (bullets.hasNext()) {
 			Bullet bullet = bullets.next();
@@ -75,7 +76,7 @@ class Game extends JPanel implements ActionListener {
 				bullets.remove();
 				continue;
 			}
-			Iterator<Enemy> iter = player.enemy.iterator();
+			Iterator<Enemy> iter = player.getEnemy().iterator();
 			while (iter.hasNext()) {
 				Enemy p = iter.next();
 				if (bullet.getX() >= p.getX() && bullet.getY() - 6 == p.getY() && bullet.getStartX() < p.getX()) {
@@ -83,7 +84,7 @@ class Game extends JPanel implements ActionListener {
 					bullets.remove();
 					if (p.getHp() <= 0) {
 						player.addKills();
-						player.explosions.add(new Explosion(p.getX(), p.getY(), "shot"));
+						player.getExplosions().add(new Explosion(p.getX(), p.getY(), "shot"));
 						player.addMoney(p.getMoney());
 						iter.remove();
 					}
@@ -95,10 +96,10 @@ class Game extends JPanel implements ActionListener {
 
 	public void runEnemy() {
 		player.addEnemy(k);
-		Iterator<Enemy> enemies = player.enemy.iterator();
+		Iterator<Enemy> enemies = player.getEnemy().iterator();
 
 		while (enemies.hasNext()) {
-			Iterator<Defender> iter2 = player.defenders.iterator();
+			Iterator<Defender> iter2 = player.getDefenders().iterator();
 			Enemy enemy = enemies.next();
 			enemy.setX();
 			if (enemy.getX() <= 0) {
@@ -110,7 +111,7 @@ class Game extends JPanel implements ActionListener {
 				Defender p = iter2.next();
 				if (enemy.getY() == p.getY() && (enemy.getX() - p.getX() <= 0) && (enemy.getX() - p.getX() + player.getSpeed() >= 0))
 				{
-					player.explosions.add(new Explosion(p.getX(), p.getY(), "defender"));
+					player.addExplosion(p.getX(), p.getY(), "defender");
 					map.getCell(p.getX() / 64, p.getY() / 64).setDefender(false);
 					iter2.remove();
 				}
@@ -160,7 +161,7 @@ class Game extends JPanel implements ActionListener {
 	}
 
 	public Image constructorImage(String nameImage) {
-		return new ImageIcon("src/main/resources/" + nameImage + ".png").getImage();
+		return new ImageIcon(ClassLoader.getSystemResource(nameImage + ".png")).getImage();
 	}
 
 	public void drawMap(Graphics g) {
@@ -171,7 +172,7 @@ class Game extends JPanel implements ActionListener {
 	}
 
 	public void drawEnemy(Graphics g) {
-		Iterator<Enemy> iter2 = player.enemy.iterator();
+		Iterator<Enemy> iter2 = player.getEnemy().iterator();
 		while (iter2.hasNext()) {
 			Enemy q = iter2.next();
 			g.drawImage(q.getImage(), q.getX(), q.getY(), 64, 64, null);
@@ -179,7 +180,7 @@ class Game extends JPanel implements ActionListener {
 	}
 
 	public void drawBullet(Graphics g) {
-		Iterator<Bullet> iter1 = player.bullets.iterator();
+		Iterator<Bullet> iter1 = player.getBullets().iterator();
 		while (iter1.hasNext()) {
 			Bullet q = iter1.next();
 			g.drawImage(q.getImage(), q.getX(), q.getY() - 8, 64, 64, null);
@@ -187,7 +188,7 @@ class Game extends JPanel implements ActionListener {
 	}
 
 	public void drawAnimation(Graphics g) {
-		Iterator<Explosion> iterExp = player.explosions.iterator();
+		Iterator<Explosion> iterExp = player.getExplosions().iterator();
 		while (iterExp.hasNext()) {
 			Explosion exp = iterExp.next();
 			g.drawImage(exp.getImage(), exp.getX(), exp.getY() , 64,64, null);
@@ -198,7 +199,7 @@ class Game extends JPanel implements ActionListener {
 	}
 
 	public void drawDefender(Graphics g) {
-		for (Defender q : player.defenders)
+		for (Defender q : player.getDefenders())
 			g.drawImage(q.getImage(), q.getX(), q.getY(), 64, 64, null);
 	}
 
@@ -224,11 +225,11 @@ class Game extends JPanel implements ActionListener {
 				if (!map.getCell(MouseMove.getNewX() / 64, MouseMove.getNewY() / 64).getDefender()) {
 					if (MouseMove.getNameImage().equals("defender1") && player.getMoney() >= defender1.getPrice()) {
 						this.player.subtractMoney(defender1.getPrice());
-						player.defenders.add(new Defender1((MouseMove.getNewX() / 64) * 64, (MouseMove.getNewY() / 64) * 64));
+						player.getDefenders().add(new Defender1((MouseMove.getNewX() / 64) * 64, (MouseMove.getNewY() / 64) * 64));
 						map.getCell(MouseMove.getNewX() / 64, MouseMove.getNewY() / 64).setDefender(true);
 					} else if (MouseMove.getNameImage().equals("defender2") && player.getMoney() >= defender2.getPrice()) {
 						this.player.subtractMoney(defender2.getPrice());
-						player.defenders.add(new Defender2((MouseMove.getNewX() / 64) * 64, (MouseMove.getNewY() / 64) * 64));
+						player.getDefenders().add(new Defender2((MouseMove.getNewX() / 64) * 64, (MouseMove.getNewY() / 64) * 64));
 						map.getCell(MouseMove.getNewX() / 64, MouseMove.getNewY() / 64).setDefender(true);
 					}
 			}

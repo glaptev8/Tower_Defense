@@ -1,17 +1,18 @@
 import java.util.LinkedList;
+import java.util.List;
 
 public class Player {
-	private int		money = 500;
+	private int		money = 600;
 	private int 	kills = 0;
 	private int 	level = 1;
-	static  float		begin_frequency = 20;
+	static  float	begin_frequency = 12;
 	private float 	time_enemy = 2;
-	private double	speed = 1;
+	private double	speed = 2;
 	private Map		map;
-	LinkedList<Enemy>	enemy = new LinkedList<>();
-	LinkedList<Defender> defenders = new LinkedList<>();
-	LinkedList<Bullet>	bullets = new LinkedList<>();
-	LinkedList<Explosion> explosions = new LinkedList<>();
+	private List<Enemy> enemy = new LinkedList<>();
+	private List<Defender> defenders = new LinkedList<>();
+	private List<Bullet>	bullets = new LinkedList<>();
+	private List<Explosion> explosions = new LinkedList<>();
 
 	Player(Map map) {
 		this.map = map;
@@ -27,6 +28,26 @@ public class Player {
 
 	public double getSpeed() {
 		return speed;
+	}
+
+	public List<Enemy> getEnemy () {
+		return (this.enemy);
+	}
+
+	public List<Defender> getDefenders () {
+		return (this.defenders);
+	}
+
+	public List<Bullet> getBullets () {
+		return (this.bullets);
+	}
+
+	public List<Explosion> getExplosions () {
+		return (this.explosions);
+	}
+
+	public void addExplosion(int x, int y, String str) {
+		this.explosions.add(new Explosion(x, y, str));
 	}
 
 	public void setSpeed() {
@@ -50,7 +71,7 @@ public class Player {
 		if (k % time_enemy == 0.0)
 		{
 			time_enemy = begin_frequency + (int)(Math.random() * 500 / Math.max(level, 3));
-			if (hard == 2 || hard == 1)
+			if (hard == 2 || hard == 1 || hard == 3)
 				this.enemy.add(new Enemy1(getSpeed(), this.map.getCell(19, (int) (Math.random() * 14))));
 			else
 				this.enemy.add(new Enemy2(getSpeed(), this.map.getCell(19, (int) (Math.random() * 14))));

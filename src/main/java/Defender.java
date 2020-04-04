@@ -1,19 +1,22 @@
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 
 abstract class Defender {
 	private int		x;
 	private int		y;
-	private int		DAMAGE;
-	private int		PRICE;
+	private int		damage;
+	private int		price;
 	private Image	image;
+	private URL		iconURL;
 
-	Defender(int x, int y, int DAMAGE, int PRICE, String pathToDefender) {
-		this.DAMAGE = DAMAGE;
-		this.PRICE = PRICE;
+	Defender(int x, int y, int damage, int price, String pathToDefender) {
+		this.damage = damage;
+		this.price = price;
 		this.x = x;
 		this.y = y;
-		this.image = new ImageIcon(pathToDefender).getImage();
+		this.iconURL = ClassLoader.getSystemResource(pathToDefender);
+		this.image = new ImageIcon(this.iconURL).getImage();
 	}
 
 	public int getX() {
@@ -25,7 +28,7 @@ abstract class Defender {
 	}
 
 	public int getPrice() {
-		return this.PRICE;
+		return this.price;
 	}
 
 	public Image getImage() {
@@ -33,18 +36,18 @@ abstract class Defender {
 	}
 
 	public int getDamage() {
-		return this.DAMAGE;
+		return this.damage;
 	}
 }
 
 class Defender1 extends Defender {
 	Defender1(int x, int y) {
-		super(x, y, 50, 100, "src/main/resources/defender1.png");
+		super(x, y, 50, 100, "defender1.png");
 	}
 }
 
 class Defender2 extends Defender {
 	Defender2(int x, int y) {
-		super(x, y, 150, 200, "src/main/resources/defender2.png");
+		super(x, y, 150, 200, "defender2.png");
 	}
 }

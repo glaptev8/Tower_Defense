@@ -1,13 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 
 abstract class Enemy {
 	private double speed;
-	protected int x;
-	protected int y;
-	protected int hp;
-	protected int money;
-	protected Image image;
+	private int x;
+	private int y;
+	private int hp;
+	private int money;
+	private Image image;
+	private URL iconURL;
 
 	Enemy (double speed, Cell startCell, int hp, int price, String pathToEnemy) {
 		this.speed = speed;
@@ -15,7 +17,8 @@ abstract class Enemy {
 		this.y = startCell.getY();
 		this.hp = hp;
 		this.money = price;
-		this.image = new ImageIcon(pathToEnemy).getImage();
+		this.iconURL = ClassLoader.getSystemResource(pathToEnemy);
+		this.image = new ImageIcon(this.iconURL).getImage();
 	}
 
 	public Image getImage() {
@@ -49,12 +52,12 @@ abstract class Enemy {
 
 class Enemy1 extends Enemy{
 	public Enemy1(double speed, Cell startCell) {
-		super(speed, startCell, 200, 100, "src/main/resources/shipNLO.png");
+		super(speed, startCell, 200, 100, "shipNLO.png");
 	}
 }
 
 class Enemy2 extends Enemy{
 	public Enemy2(double speed, Cell startCell) {
-		super(speed, startCell, 100, 50, "src/main/resources/enemy.png");
+		super(speed, startCell, 100, 50, "enemy.png");
 	}
 }
