@@ -6,4 +6,4 @@ The goal of this project is to implement a simplistic (or not) plants vs zombies
 5. One of the defender has more strength
 6. One of the enemies has mor strength
 7. if one of the enemies reached the end you lost
-![](game.mov)
+![](game.gif)
