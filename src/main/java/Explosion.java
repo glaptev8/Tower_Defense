@@ -55,7 +55,6 @@ public class Explosion {
 			alive = false;
 			return null;
 		}
-		System.out.println(animation.get(index));
 		URL url = ClassLoader.getSystemResource(animation.get(index));
 		return new ImageIcon(url).getImage();
 	}
